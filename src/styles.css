@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+.hor_space_100{
+    padding-top: 100px;
+}
+
+.btn_narrow{
+    width: 90px;
+}
