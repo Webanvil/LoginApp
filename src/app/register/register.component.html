@@ -17,8 +17,7 @@
        
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Logout</a></li>
-       
+        
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -38,6 +37,7 @@
               novalidate
               (ngSubmit)="register(registerForm)"
               #registerForm="ngForm">
+              
               <div class="form-group">
                 <div [ngClass]="{'has-error' : (emVar.touched || emVar.dirty) && !emVar.valid}">
                 <label for="email">Email Address</label>
@@ -47,8 +47,8 @@
                         class="form-control"
                         required
                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                        autofocus
-                        placeholder="Enter email address"
+                      
+                        placeholder="Email (Required)"
                         [(ngModel)]="email"
                         #emVar="ngModel">
                         <span class="help-block" *ngIf="(emVar.touched || emVar.dirty) && emVar.errors">
@@ -64,6 +64,23 @@
               </div>
 
               <div class="form-group">
+                <div [ngClass]="{'has-error' : (disNameVar.touched || disNameVar.dirty) && !disNameVar.valid}">
+                <label for="disName">Display Name</label>
+                <input type="text"
+                        name="disName"
+                        id="disName"
+                        class="form-control"
+                        required
+                        placeholder="Display Name (Required)"
+                        [(ngModel)]="displayName"
+                        #disNameVar="ngModel">
+                        <span class="help-block" *ngIf="(disNameVar.touched || disNameVar.dirty) && disNameVar.errors">
+                          A display name is required
+                        </span>
+                </div>
+              </div>
+
+              <div class="form-group">
                 <div [ngClass]="{'has-error' : (pw1Var.touched || pw1Var.dirty) && !pw1Var.valid}">
                 <label for="password1">Password</label>
                 <input type="password"
@@ -71,7 +88,7 @@
                         name="password1"
                         class="form-control"
                         required
-                        placeholder="Enter Password"
+                        placeholder="Password (Required)"
                         [(ngModel)]="password1"
                         #pw1Var="ngModel">
                         <span class="help-block" *ngIf="(pw1Var.touched || pw1Var.dirty) && pw1Var.errors">
@@ -88,7 +105,7 @@
                 name="password2"
                 class="form-control"
                 required
-                placeholder="Confirm Password"
+                placeholder="Confirm Password (Required)"
                 [(ngModel)]="password2"
                 #pw2Var="ngModel">
                 <span class="help-block" *ngIf="(pw2Var.touched || pw2Var.dirty) && pw2Var.errors">

@@ -4,6 +4,9 @@ import { CanActivate,
          ActivatedRouteSnapshot,
          RouterStateSnapshot} from '@angular/router';
 import * as firebase from 'firebase';
+import { Member } from 'app/admin/admin-shared/member';
+import { ToastrService } from 'toastr-ng2';
+
 
 @Injectable()
 export class UserService implements CanActivate {
@@ -11,8 +14,11 @@ export class UserService implements CanActivate {
   loggedInUser: string;
   authUser: any;
   userId: string;
+  
+  membersDetails: Member;
+  
 
-  constructor(private _router: Router ) {
+  constructor(private _router: Router, private _ts: ToastrService) {
     firebase.initializeApp({
       apiKey: "AIzaSyC0iiHPXv-z-NMDh6fRPKL9x9iH4CKvsTU",
       authDomain: "the-collection-3127a.firebaseapp.com",
@@ -37,8 +43,9 @@ export class UserService implements CanActivate {
   //Register a new user using email and password
   register(email: string, password: string){
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .catch(function(error){
-        alert(`${error.message} Please try again!`)
+      .catch((error) =>{
+        //alert(`${error.message} Please try again!`)
+        this._ts.error(error.message + " Please try again!");
       })
   }
 
@@ -46,34 +53,75 @@ export class UserService implements CanActivate {
   verifyUser(){
     this.authUser = firebase.auth().currentUser;
     if (this.authUser){
-      alert(`Welcome ${this.authUser.mail}`);
+      //alert(`Welcome ${this.authUser.mail}`);
+      this.showSuccess("Welcome " + this.authUser.email);
       this.loggedInUser = this.authUser.email;
       this.userId = this.authUser.uid;
       this.userLoggedIn = true;
       this._router.navigate(['/admin']);
 
       //For debugging and testing
-      console.log("User Id" + this.userId);
-      console.log(this.authUser);
+      //console.log("User Id = " + this.userId);
+      //console.log(this.authUser);
     }
   }
 
   //Logs a user in
   login(loginEmail: string, loginPassword: string){
     firebase.auth().signInWithEmailAndPassword(loginEmail, loginPassword)
-      .catch(function(error){
-        alert(`${error.message} Unable to login. Try again!`);
-      })
+      //.catch(function(error){
+      //  alert(`${error.message} Unable to login. Try again!`);
+      //})
+      .catch((error)=>{
+        this.showError(error.message + "Unable to login. Please try again");
+      });
+
   }
 
   //Logs a user out
   logout(){
     this.userLoggedIn = false;
-    firebase.auth().signOut().then(function(){
-      alert(`Logged Out`);
+    firebase.auth().signOut().then(()=>{
+      //alert(`Logged Out`);
+      //this._ts.success("User Logged Out", "Login App");
+      //this.showSuccess('User logged out');
     }, function(error) {
         alert(`${error.message} Unable to logout. Try again!`);
     });
   }
+
+//Creates a new member in the database
+  createMember(member: Member){
+    let dbRef = firebase.database().ref('users/' + this.userId);
+    let newMember = dbRef.push();
+    newMember.set({
+      adminAccount: member.adminAccount,
+      displayName: member.displayName,
+      firstName: member.firstName,
+      surname: member.surname,
+      twitterHandle: member.twitterHandle,
+      cellNumber: member.cellNumber
+    })
+  }
+
+  // createMember(member: Member){
+  //   let dbRef = firebase.database().ref('users/' + this.userId);
+  //   dbRef.child('adminAccount').set(member.adminAccount);
+  //   dbRef.child('displayName').set(member.displayName);
+  //   dbRef.child('firstName').set(member.firstName);
+  //   dbRef.child('surname').set(member.surname);
+  //   dbRef.child('twitterHandle').set(member.twitterHandle);
+  //   dbRef.child('cellNumber').set(member.cellNumber);
+  // }
+
+  showSuccess(msg: string){
+   this._ts.success(msg, 'Login App');
+ }
+
+  showError(msg: string){
+    this._ts.error(msg, 'Login App');
+  }
+
+
 
 }

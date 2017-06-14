@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   password1: string;
   password2: string;
   passwordFail: boolean = false;
+  displayName: string;
   userId: string;
 
   constructor(private _userSVC: UserService, private _router: Router) { }
@@ -26,6 +27,7 @@ export class RegisterComponent implements OnInit {
       this._userSVC.register(this.email, this.password1);
       this._userSVC.verifyUser();
       this.userId = this._userSVC.userId;
+      //this._userSVC.createUser(this.displayName);
     }
 
     //For debugging and testing

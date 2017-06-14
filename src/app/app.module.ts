@@ -2,6 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from  '@angular/platform-browser/animations';
+//import { NoopAnimationsModule} from "@angular/platform-browser/animations";
+//import { ToastModule } from 'ng2-toastr/ng2-toastr';
+
+
+import { ToastrModule } from 'toastr-ng2';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -19,13 +26,19 @@ import { AdminModule } from 'app/admin/admin.module';
     RegisterComponent,
     ErrorComponent
   ],
+
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    //NoopAnimationsModule,
     FormsModule,
     HttpModule,
+    CommonModule,
     AdminModule,
+    ToastrModule.forRoot(),
     AppRoutingModule
   ],
+
   providers:[
     UserService
     ],
