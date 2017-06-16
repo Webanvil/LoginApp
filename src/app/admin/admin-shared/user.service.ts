@@ -14,10 +14,9 @@ export class UserService implements CanActivate {
   loggedInUser: string;
   authUser: any;
   userId: string;
+  providerId: string; 
+  //membersDetails: Member;
   
-  membersDetails: Member;
-  
-
   constructor(private _router: Router, private _ts: ToastrService) {
     firebase.initializeApp({
       apiKey: "AIzaSyC0iiHPXv-z-NMDh6fRPKL9x9iH4CKvsTU",
@@ -53,15 +52,16 @@ export class UserService implements CanActivate {
   verifyUser(){
     this.authUser = firebase.auth().currentUser;
     if (this.authUser){
-      //alert(`Welcome ${this.authUser.mail}`);
       this.showSuccess("Welcome " + this.authUser.email);
       this.loggedInUser = this.authUser.email;
       this.userId = this.authUser.uid;
+      this.providerId = this.authUser.providerId;
       this.userLoggedIn = true;
-      this._router.navigate(['/admin']);
+      this._router.navigate(['user/']);
 
       //For debugging and testing
       //console.log("User Id = " + this.userId);
+      //console.log("Provider Id =" + this.providerId);
       //console.log(this.authUser);
     }
   }
@@ -114,10 +114,32 @@ export class UserService implements CanActivate {
   //   dbRef.child('cellNumber').set(member.cellNumber);
   // }
 
+  //Gets the current users details from the database
+  //  getMembersDetails(){
+  //    let dbRef = firebase.database().ref('/users/' + this.userId)
+  //      .once('value')
+  //      .then((snapshot)=> {
+  //        if (snapshot.exists){
+  //          let tmp = snapshot.val();
+  //          let transform = Object.keys(tmp).map(key => tmp[key]);
+  //          let aa = transform[0].adminAccount;
+  //          let dn = transform[0].displayName;
+  //          let fn = transform[0].firstName;
+  //          let sn = transform[0].surname;
+  //          let th = transform[0].twitterHandle;
+  //          let cn = transform[0].cellNumber;
+  //          this.membersDetails = new Member(aa,dn,fn,sn,th,cn);
+  //         console.log(this.membersDetails);
+  //        }
+  //      })
+  //  }
+
+//Toastr Success Message
   showSuccess(msg: string){
    this._ts.success(msg, 'Login App');
  }
 
+//Toastr Error Message
   showError(msg: string){
     this._ts.error(msg, 'Login App');
   }

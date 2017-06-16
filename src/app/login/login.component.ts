@@ -18,10 +18,7 @@ export class LoginComponent implements OnInit {
   login(loginForm: NgForm){
     this._userSVC.login(this.email, this.password1);
     this._userSVC.verifyUser();
-
-    //For debugging and testing
-    //console.log(loginForm.form);
-    //console.log('Saved: ' + JSON.stringify(loginForm.value));
+    //this._userSVC.getMembersDetails();
   }
 
 //Navigates to the registration form
